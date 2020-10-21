@@ -23,6 +23,12 @@ public class Tests {
         Assertions.assertEquals(mStack.count(), 5);
         Assertions.assertEquals(mStack.pop(), false);
     }
+    
+    @Test
+    public void emptyStack() {
+        Stack mStack = new Stack();
+        Assertions.assertEquals(mStack.pop(), null);
+    }
 
     @Test
     public void bigTests() {
