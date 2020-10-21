@@ -4,15 +4,14 @@ import java.util.Iterator;
 public class Stack<T> implements Iterable<T> {
 
     private int mSize = 2;
-    private Object[] stackArray = new Object[mSize];
+    private T[] stackArray = (T[]) new Object[mSize];
     private int top = -1;
 
     /**
      * Метод увеличивающая стек, если кончилось место на нем
      */
     public void increaseStack() {
-        mSize *= mSize;
-        stackArray = Arrays.copyOf(stackArray, stackArray.length + mSize);
+        stackArray = Arrays.copyOf(stackArray, stackArray.length + 1);
     }
 
     /**
@@ -20,7 +19,7 @@ public class Stack<T> implements Iterable<T> {
      *
      * @param element - эл-т который нужно добавить
      */
-    public void push(Object element) {
+    public void push(T element) {
         if (mSize == top + 1 || mSize == 2) {
             increaseStack();
         }
@@ -32,7 +31,10 @@ public class Stack<T> implements Iterable<T> {
      *
      * @return - возвращает эл-т
      */
-    public Object pop() {
+    public T pop() {
+        if (top == -1) {
+            return null;
+        }
         return stackArray[top--];
     }
 
@@ -71,7 +73,10 @@ public class Stack<T> implements Iterable<T> {
              */
             @Override
             public T next() {
-                return (T) stackArray[currentIndex++];
+                if (!hasNext()) {
+                    return null;
+                }
+                return pop();
             }
 
             /**
@@ -84,7 +89,5 @@ public class Stack<T> implements Iterable<T> {
         };
         return it;
     }
-
 }
-
 
