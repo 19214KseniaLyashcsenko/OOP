@@ -1,5 +1,7 @@
+import org.junit.jupiter.api.Assertions;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Stack<T> implements Iterable<T> {
 
@@ -33,7 +35,7 @@ public class Stack<T> implements Iterable<T> {
      */
     public T pop() {
         if (top == -1) {
-            return null;
+            throw new NoSuchElementException("Stack is empty");
         }
         return stackArray[top--];
     }
@@ -89,5 +91,12 @@ public class Stack<T> implements Iterable<T> {
         };
         return it;
     }
+    public void main(){
+        Stack mStack = new Stack();
+        System.out.println(mStack.pop());
+    }
 }
+
+
+
 
