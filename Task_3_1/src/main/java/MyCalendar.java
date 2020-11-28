@@ -1,9 +1,51 @@
 import java.util.Arrays;
-import java.util.Date;
 
-public class MyCalendar {
-    public static int[] dayInMonth = new int[]{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    public static String[] allMonth = new String[]{"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+class MyDate {
+    private static int[] dayInMonth = new int[]{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    private static String[] allMonth = new String[]{"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+    private  int day;
+    private  String month;
+    private  int year;
+
+    MyDate(int day, String month, int year) {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+    }
+
+    public int getDay() {
+          if(Arrays.asList(allMonth).contains(month)) {
+              int i = Arrays.asList(allMonth).indexOf(month);
+              if (day <= dayInMonth[i] || (i == 2 && vesYear(year) && day <= 29))
+                  return day;
+              else throw new IllegalStateException("Days entered incorrectly!!!");
+          }
+          else throw new IllegalArgumentException("Month entered incorrectly!!!");
+    }
+
+    public String getMonth() {
+        if(Arrays.asList(allMonth).contains(month))
+        return month;
+        else throw new IllegalArgumentException("Month entered incorrectly!!!");
+    }
+
+    public int getYear() {
+        if(year>=1600 && year < 10000)
+        return year;
+        else throw new IllegalArgumentException("Years entered incorrectly!!!");
+    }
+
+    public int getIdMonth() {
+        if(Arrays.asList(allMonth).contains(month))
+            return Arrays.asList(allMonth).indexOf(month);
+        else throw new IllegalArgumentException("Month entered incorrectly!!!");
+    }
+
+    public void printDate() {
+        System.out.printf("%d %s %d\n", day, month, year);
+    }
+
 
     /**
      *
@@ -11,22 +53,24 @@ public class MyCalendar {
      * @param date2 - the date that is deducted
      * @return - return the result of subtracting date1 and date2 of type MyDate
      */
-    public static int[] minDate(MyDate date1, MyDate date2){
+    public static int[] subtractDate(MyDate date1, MyDate date2){
         int day1 = date1.getDay();
         String strMonth1 = date1.getMonth();
         int month1 = date1.getIdMonth();
         int year1 = date1.getYear();
+        System.out.printf("%d %d %d\n",year1, month1, day1);
 
         int day2 = date2.getDay();
         int month2 = date2.getIdMonth();
         int year2 = date2.getYear();
+        System.out.printf("%d %d %d\n",year2, month2, day2);
 
         MyDate date = new MyDate(day1, strMonth1, year1);
-        date = minDays(date1, day2);
+        date = subtractDays(date1, day2);
         int day = date.getDay();
 
         date = date1;
-        date = minMonth(date1, month2);
+        date = subtractMonth(date1, month2);
 
         int month = date.getIdMonth();
         int year =  year1 - year2;
@@ -37,7 +81,7 @@ public class MyCalendar {
             if (month1 <= month2) year--;
         }
         int[] resArr = new int[]{year,month,day};
-       // System.out.printf("%d лет %d месяцев %d дней назад\n",year, month, day);
+        // System.out.printf("%d лет %d месяцев %d дней назад\n",year, month, day);
         return resArr;
     }
 
@@ -47,7 +91,7 @@ public class MyCalendar {
      * @param countYear - the number of years to subtract
      * @return - returns the result of subtracting years to a date
      */
-    public static MyDate minYear(MyDate date, int countYear){
+    public static MyDate subtractYear(MyDate date, int countYear){
         int day = date.getDay();
         String month = date.getMonth();
         int year = date.getYear();
@@ -80,7 +124,7 @@ public class MyCalendar {
      * @param countMonth - the amount of month to subtract
      * @return - returns the result of subtracting month to a date
      */
-    public static MyDate minMonth(MyDate date, int countMonth){
+    public static MyDate subtractMonth(MyDate date, int countMonth){
         int day = date.getDay();
         int month = date.getIdMonth();
         int year = date.getYear();
@@ -130,7 +174,7 @@ public class MyCalendar {
      * @param day2 - the amount of days to subtract
      * @return - returns the result of subtracting amount of days to a date
      */
-    public static MyDate minDays(MyDate date, int day2) {
+    public static MyDate subtractDays(MyDate date, int day2) {
         int day = date.getDay();
         int month = date.getIdMonth();
         int year = date.getYear();
@@ -284,42 +328,5 @@ public class MyCalendar {
     public static boolean vesYear(int year) {
         if ((year % 4 == 0) && (year % 100 != 0) || year % 400 == 0) return true;
         else return false;
-    }
-}
-
-/**
- * my type for date
- */
-class MyDate {
-
-    private int day;
-    private String month;
-    private int year;
-
-    MyDate(int day, String month, int year) {
-        this.day = day;
-        this.month = month;
-        this.year = year;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public int getIdMonth() {
-        String[] allMonth = new String[]{"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        return Arrays.asList(allMonth).indexOf(month);
-    }
-
-    public void printDate() {
-        System.out.printf("%d %s %d\n", day, month, year);
     }
 }
