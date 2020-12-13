@@ -6,20 +6,21 @@ public class Tests {
 
     @Test
     public void Test1() {
-        RecordBook.semesterAdd("Семестр 1", "Императивное программирование", 4);
-        RecordBook.semesterAdd("Семестр 1", "Введение в алгебру и анализ", 3);
-        RecordBook.semesterAdd("Семестр 1", "Введение в дискретную математику и математическую логику", 4);
-        RecordBook.semesterAdd("Семестр 1", "Основы культуры речи", 5);
-        RecordBook.semesterAdd("Семестр 1", "Декларативное программирование", 4);
-        RecordBook.semesterAdd("Семестр 1", "История", 5);
+        RecordBook RecordBook = new RecordBook("РљСЃРµРЅРёСЏ", "Р›СЏС‰РµРЅРєРѕ");
+        RecordBook.semesterAdd(1, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 4);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 3);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 4);
+        RecordBook.semesterAdd(1, "РћСЃРЅРѕРІС‹ РєСѓР»СЊС‚СѓСЂС‹ СЂРµС‡Рё", 5);
+        RecordBook.semesterAdd(1, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 4);
+        RecordBook.semesterAdd(1, "РСЃС‚РѕСЂРёСЏ", 5);
 
-        RecordBook.semesterAdd("Семестр 2", "Императивное программирование", 4);
-        RecordBook.semesterAdd("Семестр 2", "Цифровые платформы", 5);
-        RecordBook.semesterAdd("Семестр 2", "Введение в алгебру и анализ", 4);
-        RecordBook.semesterAdd("Семестр 2", "Иностранный язык", 4);
-        RecordBook.semesterAdd("Семестр 2", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 2", "Декларативное программирование", 4);
-        RecordBook.semesterAdd("Семестр 2", "Дипломная работа", 5);
+        RecordBook.semesterAdd(2, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 4);
+        RecordBook.semesterAdd(2, "Р¦РёС„СЂРѕРІС‹Рµ РїР»Р°С‚С„РѕСЂРјС‹", 5);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 4);
+        RecordBook.semesterAdd(2, "РРЅРѕСЃС‚СЂР°РЅРЅС‹Р№ СЏР·С‹Рє", 4);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(2, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 4);
+        RecordBook.semesterAdd(2, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
 
         assertEquals(4.3, RecordBook.averageGrade(), 1);
         assertEquals(false,RecordBook.isIncreaseGrant());
@@ -28,20 +29,21 @@ public class Tests {
 
     @Test
     public void Test2(){
-        RecordBook.semesterAdd("Семестр 1", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 1", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 1", "Основы культуры речи", 5);
-        RecordBook.semesterAdd("Семестр 1", "Декларативное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "История", 5);
+        RecordBook RecordBook = new RecordBook("РђРЅР°С‚РѕР»РёР№", "Р‘СѓСЂР°РІРѕРІ");
+        RecordBook.semesterAdd(1, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(1, "РћСЃРЅРѕРІС‹ РєСѓР»СЊС‚СѓСЂС‹ СЂРµС‡Рё", 5);
+        RecordBook.semesterAdd(1, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "РСЃС‚РѕСЂРёСЏ", 5);
 
-        RecordBook.semesterAdd("Семестр 2", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 2", "Цифровые платформы", 5);
-        RecordBook.semesterAdd("Семестр 2", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 2", "Иностранный язык", 5);
-        RecordBook.semesterAdd("Семестр 2", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 2", "Декларативное программирование", 5);
-        RecordBook.semesterAdd("Семестр 2", "Дипломная работа", 5);
+        RecordBook.semesterAdd(2, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(2, "Р¦РёС„СЂРѕРІС‹Рµ РїР»Р°С‚С„РѕСЂРјС‹", 5);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(2, "РРЅРѕСЃС‚СЂР°РЅРЅС‹Р№ СЏР·С‹Рє", 5);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(2, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(2, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
 
         assertEquals(5, RecordBook.averageGrade(), 1);
         assertEquals(true,RecordBook.isIncreaseGrant());
@@ -50,38 +52,39 @@ public class Tests {
 
     @Test
     public void Test3(){
-        RecordBook.semesterAdd("Семестр 1", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 1", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 1", "Основы культуры речи", 4);
-        RecordBook.semesterAdd("Семестр 1", "Декларативное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "История", 5);
+        RecordBook RecordBook = new RecordBook("РђР»РµРєСЃР°РЅРґСЂ", "Р—Р°Р±РёРІРЅРѕР№");
+        RecordBook.semesterAdd(1, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(1, "РћСЃРЅРѕРІС‹ РєСѓР»СЊС‚СѓСЂС‹ СЂРµС‡Рё", 4);
+        RecordBook.semesterAdd(1, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "РСЃС‚РѕСЂРёСЏ", 5);
 
-        RecordBook.semesterAdd("Семестр 2", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 2", "Цифровые платформы", 5);
-        RecordBook.semesterAdd("Семестр 2", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 2", "Иностранный язык", 4);
-        RecordBook.semesterAdd("Семестр 2", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 2", "Декларативное программирование", 5);
-        RecordBook.semesterAdd("Семестр 2", "Дипломная работа", 5);
+        RecordBook.semesterAdd(2, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(2, "Р¦РёС„СЂРѕРІС‹Рµ РїР»Р°С‚С„РѕСЂРјС‹", 5);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(2, "РРЅРѕСЃС‚СЂР°РЅРЅС‹Р№ СЏР·С‹Рє", 4);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(2, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(2, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
 
-        RecordBook.semesterAdd("Семестр 3", "Введение в искусственный интеллект", 5);
-        RecordBook.semesterAdd("Семестр 3", "Модели вычислений", 5);
+        RecordBook.semesterAdd(3, "Р’РІРµРґРµРЅРёРµ РІ РёСЃРєСѓСЃСЃС‚РІРµРЅРЅС‹Р№ РёРЅС‚РµР»Р»РµРєС‚", 5);
+        RecordBook.semesterAdd(3, "РњРѕРґРµР»Рё РІС‹С‡РёСЃР»РµРЅРёР№", 5);
 
-        RecordBook.semesterAdd("Семестр 4", "Введение в компьютерные сети", 5);
-        RecordBook.semesterAdd("Семестр 4", "Программируемые микроконтроллеры", 5);
+        RecordBook.semesterAdd(4, "Р’РІРµРґРµРЅРёРµ РІ РєРѕРјРїСЊСЋС‚РµСЂРЅС‹Рµ СЃРµС‚Рё", 5);
+        RecordBook.semesterAdd(4, "РџСЂРѕРіСЂР°РјРјРёСЂСѓРµРјС‹Рµ РјРёРєСЂРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂС‹", 5);
 
-        RecordBook.semesterAdd("Семестр 5", "Вычислительная математика", 4);
-        RecordBook.semesterAdd("Семестр 5", "Введение в разработку мобильных приложений",5 );
+        RecordBook.semesterAdd(5, "Р’С‹С‡РёСЃР»РёС‚РµР»СЊРЅР°СЏ РјР°С‚РµРјР°С‚РёРєР°", 4);
+        RecordBook.semesterAdd(5, "Р’РІРµРґРµРЅРёРµ РІ СЂР°Р·СЂР°Р±РѕС‚РєСѓ РјРѕР±РёР»СЊРЅС‹С… РїСЂРёР»РѕР¶РµРЅРёР№",5 );
 
-        RecordBook.semesterAdd("Семестр 6", "Компьютерное моделирование",5 );
-        RecordBook.semesterAdd("Семестр 6", "Правоведение", 5);
+        RecordBook.semesterAdd(6, "РљРѕРјРїСЊСЋС‚РµСЂРЅРѕРµ РјРѕРґРµР»РёСЂРѕРІР°РЅРёРµ",5 );
+        RecordBook.semesterAdd(6, "РџСЂР°РІРѕРІРµРґРµРЅРёРµ", 5);
 
-        RecordBook.semesterAdd("Семестр 7", "Инновационная экономика и технологическое предпринимательство",5 );
-        RecordBook.semesterAdd("Семестр 7", "Распределенные алгоритмы",5 );
+        RecordBook.semesterAdd(7, "РРЅРЅРѕРІР°С†РёРѕРЅРЅР°СЏ СЌРєРѕРЅРѕРјРёРєР° Рё С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРѕРµ РїСЂРµРґРїСЂРёРЅРёРјР°С‚РµР»СЊСЃС‚РІРѕ",5 );
+        RecordBook.semesterAdd(7, "Р Р°СЃРїСЂРµРґРµР»РµРЅРЅС‹Рµ Р°Р»РіРѕСЂРёС‚РјС‹",5 );
 
-        RecordBook.semesterAdd("Семестр 8", "Основы риторики", 5);
-        RecordBook.semesterAdd("Семестр 8", "Дипломная работа", 5);
+        RecordBook.semesterAdd(8, "РћСЃРЅРѕРІС‹ СЂРёС‚РѕСЂРёРєРё", 5);
+        RecordBook.semesterAdd(8, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
 
         assertEquals(4.8, RecordBook.averageGrade(), 1);
         assertEquals(true,RecordBook.isIncreaseGrant());
@@ -90,38 +93,39 @@ public class Tests {
 
     @Test
     public void Test4(){
-        RecordBook.semesterAdd("Семестр 1", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 1", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 1", "Основы культуры речи", 4);
-        RecordBook.semesterAdd("Семестр 1", "Декларативное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "История", 5);
+        RecordBook RecordBook = new RecordBook("РћР»СЊРіР°", "РњРёСЂРЅР°СЏ");
+        RecordBook.semesterAdd(1, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(1, "РћСЃРЅРѕРІС‹ РєСѓР»СЊС‚СѓСЂС‹ СЂРµС‡Рё", 4);
+        RecordBook.semesterAdd(1, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "РСЃС‚РѕСЂРёСЏ", 5);
 
-        RecordBook.semesterAdd("Семестр 2", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 2", "Цифровые платформы", 5);
-        RecordBook.semesterAdd("Семестр 2", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 2", "Иностранный язык", 4);
-        RecordBook.semesterAdd("Семестр 2", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 2", "Декларативное программирование", 5);
-        RecordBook.semesterAdd("Семестр 2", "Дипломная работа", 5);
+        RecordBook.semesterAdd(2, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(2, "Р¦РёС„СЂРѕРІС‹Рµ РїР»Р°С‚С„РѕСЂРјС‹", 5);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(2, "РРЅРѕСЃС‚СЂР°РЅРЅС‹Р№ СЏР·С‹Рє", 4);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(2, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(2, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
 
-        RecordBook.semesterAdd("Семестр 3", "Введение в искусственный интеллект", 3);
-        RecordBook.semesterAdd("Семестр 3", "Модели вычислений", 5);
+        RecordBook.semesterAdd(3, "Р’РІРµРґРµРЅРёРµ РІ РёСЃРєСѓСЃСЃС‚РІРµРЅРЅС‹Р№ РёРЅС‚РµР»Р»РµРєС‚", 3);
+        RecordBook.semesterAdd(3, "РњРѕРґРµР»Рё РІС‹С‡РёСЃР»РµРЅРёР№", 5);
 
-        RecordBook.semesterAdd("Семестр 4", "Введение в компьютерные сети", 5);
-        RecordBook.semesterAdd("Семестр 4", "Программируемые микроконтроллеры", 5);
+        RecordBook.semesterAdd(4, "Р’РІРµРґРµРЅРёРµ РІ РєРѕРјРїСЊСЋС‚РµСЂРЅС‹Рµ СЃРµС‚Рё", 5);
+        RecordBook.semesterAdd(4, "РџСЂРѕРіСЂР°РјРјРёСЂСѓРµРјС‹Рµ РјРёРєСЂРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂС‹", 5);
 
-        RecordBook.semesterAdd("Семестр 5", "Вычислительная математика", 4);
-        RecordBook.semesterAdd("Семестр 5", "Введение в разработку мобильных приложений",5 );
+        RecordBook.semesterAdd(5, "Р’С‹С‡РёСЃР»РёС‚РµР»СЊРЅР°СЏ РјР°С‚РµРјР°С‚РёРєР°", 4);
+        RecordBook.semesterAdd(5, "Р’РІРµРґРµРЅРёРµ РІ СЂР°Р·СЂР°Р±РѕС‚РєСѓ РјРѕР±РёР»СЊРЅС‹С… РїСЂРёР»РѕР¶РµРЅРёР№",5 );
 
-        RecordBook.semesterAdd("Семестр 6", "Компьютерное моделирование",5 );
-        RecordBook.semesterAdd("Семестр 6", "Правоведение", 5);
+        RecordBook.semesterAdd(6, "РљРѕРјРїСЊСЋС‚РµСЂРЅРѕРµ РјРѕРґРµР»РёСЂРѕРІР°РЅРёРµ",5 );
+        RecordBook.semesterAdd(6, "РџСЂР°РІРѕРІРµРґРµРЅРёРµ", 5);
 
-        RecordBook.semesterAdd("Семестр 7", "Инновационная экономика и технологическое предпринимательство",5 );
-        RecordBook.semesterAdd("Семестр 7", "Распределенные алгоритмы",5 );
+        RecordBook.semesterAdd(7, "РРЅРЅРѕРІР°С†РёРѕРЅРЅР°СЏ СЌРєРѕРЅРѕРјРёРєР° Рё С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРѕРµ РїСЂРµРґРїСЂРёРЅРёРјР°С‚РµР»СЊСЃС‚РІРѕ",5 );
+        RecordBook.semesterAdd(7, "Р Р°СЃРїСЂРµРґРµР»РµРЅРЅС‹Рµ Р°Р»РіРѕСЂРёС‚РјС‹",5 );
 
-        RecordBook.semesterAdd("Семестр 8", "Основы риторики", 5);
-        RecordBook.semesterAdd("Семестр 8", "Дипломная работа", 5);
+        RecordBook.semesterAdd(8, "РћСЃРЅРѕРІС‹ СЂРёС‚РѕСЂРёРєРё", 5);
+        RecordBook.semesterAdd(8, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
 
         assertEquals(4.8, RecordBook.averageGrade(), 1);
         assertEquals(true,RecordBook.isIncreaseGrant());
@@ -130,31 +134,32 @@ public class Tests {
 
     @Test
     public void Test5(){
-        RecordBook.semesterAdd("Семестр 1", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 1", "Основы культуры речи", 4);
-        RecordBook.semesterAdd("Семестр 8", "Основы риторики", 5);
-        RecordBook.semesterAdd("Семестр 7", "Распределенные алгоритмы",5 );
-        RecordBook.semesterAdd("Семестр 1", "Декларативное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "История", 5);
-        RecordBook.semesterAdd("Семестр 2", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 2", "Цифровые платформы", 5);
-        RecordBook.semesterAdd("Семестр 1", "Императивное программирование", 5);
-        RecordBook.semesterAdd("Семестр 1", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 2", "Введение в алгебру и анализ", 5);
-        RecordBook.semesterAdd("Семестр 6", "Компьютерное моделирование",5 );
-        RecordBook.semesterAdd("Семестр 2", "Иностранный язык", 4);
-        RecordBook.semesterAdd("Семестр 2", "Дипломная работа", 5);
-        RecordBook.semesterAdd("Семестр 8", "Дипломная работа", 5);
-        RecordBook.semesterAdd("Семестр 4", "Введение в компьютерные сети", 5);
-        RecordBook.semesterAdd("Семестр 4", "Программируемые микроконтроллеры", 5);
-        RecordBook.semesterAdd("Семестр 5", "Вычислительная математика", 4);
-        RecordBook.semesterAdd("Семестр 5", "Введение в разработку мобильных приложений",5 );
-        RecordBook.semesterAdd("Семестр 3", "Введение в искусственный интеллект", 3);
-        RecordBook.semesterAdd("Семестр 3", "Модели вычислений", 5);
-        RecordBook.semesterAdd("Семестр 6", "Правоведение", 5);
-        RecordBook.semesterAdd("Семестр 7", "Инновационная экономика и технологическое предпринимательство",5 );
-        RecordBook.semesterAdd("Семестр 2", "Введение в дискретную математику и математическую логику", 5);
-        RecordBook.semesterAdd("Семестр 2", "Декларативное программирование", 5);
+        RecordBook RecordBook = new RecordBook("РЎРµСЂРіРµР№", "Р›СЋС‚С‹Р№");
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(1, "РћСЃРЅРѕРІС‹ РєСѓР»СЊС‚СѓСЂС‹ СЂРµС‡Рё", 4);
+        RecordBook.semesterAdd(8, "РћСЃРЅРѕРІС‹ СЂРёС‚РѕСЂРёРєРё", 5);
+        RecordBook.semesterAdd(7, "Р Р°СЃРїСЂРµРґРµР»РµРЅРЅС‹Рµ Р°Р»РіРѕСЂРёС‚РјС‹",5 );
+        RecordBook.semesterAdd(1, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "РСЃС‚РѕСЂРёСЏ", 5);
+        RecordBook.semesterAdd(2, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(2, "Р¦РёС„СЂРѕРІС‹Рµ РїР»Р°С‚С„РѕСЂРјС‹", 5);
+        RecordBook.semesterAdd(1, "РРјРїРµСЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
+        RecordBook.semesterAdd(1, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ Р°Р»РіРµР±СЂСѓ Рё Р°РЅР°Р»РёР·", 5);
+        RecordBook.semesterAdd(6, "РљРѕРјРїСЊСЋС‚РµСЂРЅРѕРµ РјРѕРґРµР»РёСЂРѕРІР°РЅРёРµ",5 );
+        RecordBook.semesterAdd(2, "РРЅРѕСЃС‚СЂР°РЅРЅС‹Р№ СЏР·С‹Рє", 4);
+        RecordBook.semesterAdd(2, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
+        RecordBook.semesterAdd(8, "Р”РёРїР»РѕРјРЅР°СЏ СЂР°Р±РѕС‚Р°", 5);
+        RecordBook.semesterAdd(4, "Р’РІРµРґРµРЅРёРµ РІ РєРѕРјРїСЊСЋС‚РµСЂРЅС‹Рµ СЃРµС‚Рё", 5);
+        RecordBook.semesterAdd(4, "РџСЂРѕРіСЂР°РјРјРёСЂСѓРµРјС‹Рµ РјРёРєСЂРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂС‹", 5);
+        RecordBook.semesterAdd(5, "Р’С‹С‡РёСЃР»РёС‚РµР»СЊРЅР°СЏ РјР°С‚РµРјР°С‚РёРєР°", 4);
+        RecordBook.semesterAdd(5, "Р’РІРµРґРµРЅРёРµ РІ СЂР°Р·СЂР°Р±РѕС‚РєСѓ РјРѕР±РёР»СЊРЅС‹С… РїСЂРёР»РѕР¶РµРЅРёР№",5 );
+        RecordBook.semesterAdd(3, "Р’РІРµРґРµРЅРёРµ РІ РёСЃРєСѓСЃСЃС‚РІРµРЅРЅС‹Р№ РёРЅС‚РµР»Р»РµРєС‚", 3);
+        RecordBook.semesterAdd(3, "РњРѕРґРµР»Рё РІС‹С‡РёСЃР»РµРЅРёР№", 5);
+        RecordBook.semesterAdd(6, "РџСЂР°РІРѕРІРµРґРµРЅРёРµ", 5);
+        RecordBook.semesterAdd(7, "РРЅРЅРѕРІР°С†РёРѕРЅРЅР°СЏ СЌРєРѕРЅРѕРјРёРєР° Рё С‚РµС…РЅРѕР»РѕРіРёС‡РµСЃРєРѕРµ РїСЂРµРґРїСЂРёРЅРёРјР°С‚РµР»СЊСЃС‚РІРѕ",5 );
+        RecordBook.semesterAdd(2, "Р’РІРµРґРµРЅРёРµ РІ РґРёСЃРєСЂРµС‚РЅСѓСЋ РјР°С‚РµРјР°С‚РёРєСѓ Рё РјР°С‚РµРјР°С‚РёС‡РµСЃРєСѓСЋ Р»РѕРіРёРєСѓ", 5);
+        RecordBook.semesterAdd(2, "Р”РµРєР»Р°СЂР°С‚РёРІРЅРѕРµ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ", 5);
 
 
         assertEquals(4.8, RecordBook.averageGrade(), 1);
