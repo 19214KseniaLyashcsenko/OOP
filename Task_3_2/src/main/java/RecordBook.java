@@ -1,61 +1,90 @@
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class RecordBook {
+    public static class Rec {
+        private final String subject;
+        private int grade;
 
-    private  ArrayList<String> arrSubjects = new ArrayList<String>(Collections.nCopies(100, ""));
-    private  ArrayList<Integer> arrGrades = new ArrayList<Integer>(Collections.nCopies(100, 0));
+        /**
+         * @param name examination subject
+         * @param grade grade for the subject on the exam.
+         */
+        public Rec(String name, int grade){
+            if (grade > 5 || grade < 2) throw new IllegalArgumentException("grade must be between 2 and 5");
+            subject = name;
+            this.grade = grade;
+        }
 
-    private  int[] semester = new int[]{0, 0, 10, 20, 30, 40, 50, 60, 70};
-    private  boolean isThree = false;
-    private  boolean[] isFiveInSem = new boolean[]{true,true,true,true,true,true,true,true,true};
-    private  int lastSem = 0;
-    private  int counter = 0;
-    private  int counterFive = 0;
+        /**
+         * return grade
+         */
+        public int getGrade(){
+            return grade;
+        }
+    }
 
+    private final int semester;
+    private int qualifyingWork = 0;
+    private final ArrayList<ArrayList<Rec>> book;
     private String name;
     private String surname;
 
-    RecordBook(String name, String surname) {
-        this.name = name;
-        this.surname = surname;
-    }
-
     /**
-     * adds the subject and its grade to the student's record
-     * @param numSemester number of semester
-     * @param subject examination subject
-     * @param grade grade for the subject on the exam
+     * creating an empty record book
+     * @param NumberOfSemester current semester number
      */
-    public  void semesterAdd(int numSemester, String subject, int grade) { ;
-        if(numSemester > 8 || numSemester < 1) {
-            throw new IllegalArgumentException("Semester entered incorrectly!!!");
+    public RecordBook(int NumberOfSemester, String name, String surname){
+        if (NumberOfSemester < 1) throw new IllegalArgumentException("Semester number must be greater than 0");
+        semester = NumberOfSemester;
+        book = new ArrayList<ArrayList<Rec>>(NumberOfSemester);
+        for (int i = 0; i<NumberOfSemester-1; i++){
+            book.add(new ArrayList<Rec>());
         }
-        if(grade > 5 && grade < 1) throw new IllegalArgumentException("Grade entered incorrectly!!!");
-
-        if (semester[numSemester] < semester[numSemester - 1]) semester[numSemester] = semester[numSemester - 1];
-        arrSubjects.add(semester[numSemester], subject);
-        arrGrades.add(semester[numSemester], grade);
-        semester[numSemester]++;
-        counter++;
-        if (grade == 3) isThree = true;
-        if (grade == 5) counterFive++;
-        else isFiveInSem[numSemester] = false;
-        if (lastSem < numSemester) lastSem = numSemester;
     }
 
     /**
-     * calculates the arithmetic mean of all grades
+     * @param grade grade for the diploma
+     */
+    public void qualifyingWork (int grade){
+        if(grade > 5 || grade < 2) throw new IllegalArgumentException("grade must be between 2 and 5");
+        qualifyingWork = grade;
+    }
+
+
+    /**
+     * replace the semester with the transferred one
+     * @param semester semester number to be replaced
+     * @param page semester
+     */
+    public void replaceSemester(int semester, ArrayList<Rec> page){
+        if (semester<1) throw new IllegalArgumentException("Semester number must be greater than 0");
+        book.set(semester-1,page);
+    }
+
+    /**
+     * Add an entry to an existing semester
+     * @param semester semester number
+     * @param record record
+     */
+    public void addRecordToSemester(int semester, Rec record) {
+        if (semester<1) throw new IllegalArgumentException("Semester number must be greater than 0");
+        if (record == null) throw new IllegalArgumentException("record argument must be! = null");
+        book.get(semester-1).add(record);
+    }
+
+    /**
+     * calculates whether it is possible to increase the scholarship
      * @return
      */
     public double averageGrade() {
         int sum = 0;
-        for (int i = 0; i < arrGrades.size(); i++) {
-            sum += (int) arrGrades.get(i);
+        int cnt = 0;
+        for(int i = 0; i<semester-1; i++){
+            if (book.get(i)==null) throw new IllegalStateException("There are not enough semesters in the grade book");
+            cnt += book.get(i).size();
+            sum += book.get(i).stream().mapToInt(x -> x.getGrade()).sum();
         }
-        double res;
-        res = (double) sum / counter;
-        return res;
+        return 1.0 * sum/cnt;
     }
 
     /**
@@ -63,23 +92,46 @@ public class RecordBook {
      * @return
      */
     public boolean isIncreaseGrant() {
-        if(lastSem != 1){
-            if(isFiveInSem[lastSem] == true && isFiveInSem[lastSem - 1] == true) return true;
-            return false;
+        ArrayList<Rec> sem = book.get(semester-2);
+        if ((semester==1) || sem == null) throw new IllegalStateException("No previous semester in the grade book");
+        if (sem.size()==0) throw new IllegalStateException("There are no entries from the previous semester in the gradebook");
+        boolean flag = true;
+        for (Rec r : sem){
+            if (r.getGrade() != 5) {
+                flag = false;
+                break;
+            }
         }
-        else System.out.println("You haven't studied enough to raise your scholarship");
-        return false;
+        return flag;
     }
 
     /**
      * calculates whether it is possible to get a red diploma
      * @return
      */
-    public boolean isRedDiploma(){
-        int eightSem = 8;
-        int threshold = 75;
-        if (lastSem != eightSem) System.out.println("You are still far from red diploma)");
-        if(((float)counterFive/counter * 100 >=threshold) && arrGrades.get(semester[8] - 1) == 5 && isThree == false) return true;
-        return false;
+    public boolean isRedDiploma() {
+        if ((qualifyingWork!= 0) && (qualifyingWork!= 5)) return false;
+        ArrayList<Rec> lastGrades = new ArrayList<Rec>();
+        for(ArrayList<Rec> sem : book){
+            if (sem==null) throw new IllegalStateException("There are not enough semesters in the grade book");
+            for(Rec r : sem){
+                if (r.getGrade() <= 3) return false;
+                boolean fl = true;
+                for(Rec last : lastGrades){
+                    if (last.subject.equals(r.subject)){
+                        last.grade = r.getGrade();
+                        fl = false;
+                        break;
+                    }
+                }
+                if (fl) lastGrades.add(new Rec(r.subject, r.getGrade()));
+            }
+        }
+        double cnt = 0, sum = 0;
+        for(Rec r : lastGrades){
+            cnt++;
+            sum += r.getGrade();
+        }
+        return ((1.0 * sum/cnt) >= 4.75);
     }
 }
