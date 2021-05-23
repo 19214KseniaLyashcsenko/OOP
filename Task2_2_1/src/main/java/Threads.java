@@ -11,12 +11,13 @@ public class Threads<T> {
      * @param numbersThreads number of threads
      * @param predicate  the rule by which a prime number will be recognized or not
      */
-    Result<T> createThreads(ArrayList<T> arrayNumbers, int numbersThreads, Predicate<T> predicate) {
+    Result<T> createThreads(Iterable<T> arrayNumbers, int numbersThreads, Predicate<T> predicate) {
         if(arrayNumbers == null) throw new IllegalArgumentException("empty array of numbers");
         else if(numbersThreads < 1) throw new IllegalArgumentException("incorrect number of threads");
         else if(predicate == null) throw new IllegalArgumentException("predicate is null");
 
         ArrayList<ThreadHandler<T>> handlers = new ArrayList<>();
+        Thread[] threads = new Thread[numbersThreads];
 
         for(int i = 0; i<numbersThreads; i++){
             Iterator<T> iterator = arrayNumbers.iterator();
