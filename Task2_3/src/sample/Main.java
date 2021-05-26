@@ -1,6 +1,7 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,8 +9,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,63 +18,61 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-public class Main extends Application {
 
-    static int speed = 5;
-    static int width = 30;
-    static int height = 20;
-    static ArrayList<Integer> foodX = new ArrayList<Integer>();
-    static ArrayList<Integer> foodY = new ArrayList<Integer>();
-    static ArrayList<Integer> foodColor = new ArrayList<Integer>();
-    static ArrayList<Integer> obstaclesX = new ArrayList<Integer>();
-    static ArrayList<Integer> obstaclesY = new ArrayList<Integer>();
-    static int obstaclesK;
-    static int cntObstacles;
-    static int cornersize = 25;
-    static int cntFood;
-    static int cntEatFood = 0;
-    static int finishFood;
-    static List<Corner> snake = new ArrayList<>();
-    static Dir direction = Dir.left;
-    static boolean gameOver = false;
-    static boolean win = false;
-    static Random rand = new Random();
+public class Main extends Application
+{
+    Stage primaryStage;
+    int widthMenu = 750;
+    int heightMenu = 500;
+    int MatrixSize = 25;
+    int cellSize = 24;
 
-    public enum Dir {
-        left, right, up, down
-    }
+    int cntFood;
+    int cntEatFood = 0;
+    ArrayList<Integer> foodX = new ArrayList<Integer>();
+    ArrayList<Integer> foodY = new ArrayList<Integer>();
+    ArrayList<Rectangle> food = new ArrayList<Rectangle>();
 
-    public static class Corner {
-        int x;
-        int y;
+    int obstaclesK = 10;
+    ArrayList<Integer> obstaclesX = new ArrayList<Integer>();
+    ArrayList<Integer> obstaclesY = new ArrayList<Integer>();
+    ArrayList<Rectangle> obstacles = new ArrayList<Rectangle>();
 
-        public Corner(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
+    int dirX = 0;
+    int dirY = 0;
+    int posX;
+    int posY;
+    ArrayList<Snake> SnakePart = new ArrayList<>(0);
 
-    }
+    Random rand = new Random();
+    GridPane PlayField = new GridPane();
+    Timeline game;
+    double snakeSpeed = 1/10.0;
+    boolean start = false;
+    Label Score = new Label();
 
-    public void start(Stage primaryStage) {
+    public void start(Stage stage) {
+        primaryStage = stage;
         try {
-            mainMenu(primaryStage);
+            mainMenu();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void mainMenu(Stage primaryStage) {
+    public void mainMenu() {
 
         VBox root = new VBox(10);
         root.setAlignment(Pos.CENTER);
@@ -90,10 +87,17 @@ public class Main extends Application {
 
 
         //TextField "Length for victory"
-        TextField textFieldFinishFood = new TextField();
-        Label lbl1 = new Label("Length for victory");
+        Button btnSimple = new Button("Simple");
+        btnSimple.setPrefWidth(80);
+
+        Button btnMedium = new Button("Medium");
+        btnMedium.setPrefWidth(80);
+
+        Button btnHard = new Button("Hard");
+        btnHard.setPrefWidth(80);
+
         Label lbl1Er = new Label("                         ");
-        FlowPane flowPane1 = new FlowPane(Orientation.HORIZONTAL, 10, 10, lbl1, textFieldFinishFood, lbl1Er);
+        FlowPane flowPane1 = new FlowPane(Orientation.HORIZONTAL, 10, 10, btnSimple, btnMedium, btnHard);
         flowPane1.setAlignment(Pos.CENTER);
         root.getChildren().add(flowPane1);
 
@@ -111,24 +115,29 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane(btnStart);
         root.getChildren().add(borderPane);
 
+        btnSimple.setOnAction(actionEvent ->  {
+            snakeSpeed = 1/10.0;
+            obstaclesK = 10;
+        });
+
+        btnMedium.setOnAction(actionEvent ->  {
+            snakeSpeed = 1/15.0;
+            obstaclesK = 15;
+        });
+
+        btnHard.setOnAction(actionEvent ->  {
+            snakeSpeed = 1/20.0;
+            obstaclesK = 20;
+        });
+
         //Action button on Click
         btnStart.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
+
                 String cntFoodStr = textFieldCntFood.getText();
-                String finishFoodStr = textFieldFinishFood.getText();
-
                 boolean flag = true;
-
-                try {
-                    finishFood = Integer.parseInt(finishFoodStr);
-                    lbl1Er.setText("");
-                } catch (NumberFormatException e) {
-                    lbl1Er.setText("Это по твоему число???");
-                    flag = false;
-                }
-
                 try {
                     cntFood = Integer.parseInt(cntFoodStr);
                     lbl2Er.setText("");
@@ -137,289 +146,343 @@ public class Main extends Application {
                     flag = false;
                 }
 
-                if (flag) startGame(primaryStage);
+                if (flag) startGame();
             }
         });
 
-        Scene scene = new Scene(root, width * cornersize, height * cornersize);
+        Scene scene = new Scene(root, widthMenu , heightMenu);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Hello JavaFX");
+        primaryStage.setTitle("Crazy Snake");
         primaryStage.show();
     }
 
-    public static void startGame(Stage primaryStage){
+    public void startGame(){
+        PlayField = new GridPane();
 
-        VBox root = new VBox();
-        Canvas c = new Canvas(width * cornersize, height * cornersize);
-        GraphicsContext gc = c.getGraphicsContext2D();
+        foodX = new ArrayList<Integer>();
+        foodY = new ArrayList<Integer>();
+        food = new ArrayList<Rectangle>();
+        obstaclesX = new ArrayList<Integer>();
+        obstaclesY = new ArrayList<Integer>();
+        obstacles = new ArrayList<Rectangle>();
 
-        obstacles(gc);
+        Score.setTextFill(Color.WHITE);
+        Score.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        Score.setText("Eat Food: " + cntEatFood);
+
+        FillField();
+        FlowPane flowPane = new FlowPane(Orientation.VERTICAL,PlayField);
+        Scene Game = new Scene(flowPane );
+        primaryStage.setTitle("Snake");
+        primaryStage.setScene(Game);
+        primaryStage.show();
+
+        PlaceObstacles();
         CreateFood();
+        CreateSnake();
+        PlayField.add(Score, 1, 0,6,2);
+        Game.setOnKeyPressed(this::PressedKey);
 
-        root.getChildren().add(c);
-
-        Scene scene = new Scene(root, width * cornersize, height * cornersize);
-
-        new AnimationTimer() {
-            long lastTick = 0;
-
-            public void handle(long now) {
-                if (lastTick == 0) {
-                    lastTick = now;
-                    tick(gc);
-                    return;
-                }
-
-                if (now - lastTick > 1000000000 / speed) {
-                    lastTick = now;
-                    tick(gc);
-                }
-            }
-
-        }.start();
-
-        // Snake's control
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (key.getCode() == KeyCode.W) {
-                direction = Dir.up;
-            }
-            if (key.getCode() == KeyCode.A) {
-                direction = Dir.left;
-            }
-            if (key.getCode() == KeyCode.S) {
-                direction = Dir.down;
-            }
-            if (key.getCode() == KeyCode.D) {
-                direction = Dir.right;
-            }
-
-        });
-
-        //Add start snake parts
-        snake.add(new Corner(width / 2, height / 2));
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("SNAKE GAME");
-        primaryStage.show();
+        game = new Timeline(new KeyFrame(Duration.seconds(snakeSpeed),
+                new EventHandler<ActionEvent>()
+                {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        MoveSnake();
+                    }
+                }));
+        game.setCycleCount(Timeline.INDEFINITE);
     }
 
-    public static void tick(GraphicsContext gc) {
 
-        if (gameOver) {
-            gc.setFill(Color.rgb(255, 61, 61));
-            gc.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 80));
-            gc.fillText("GAME OVER", 120, 250);
-            return;
-        }
+    public void FillField()
+    {
+        for(int x =0;x<MatrixSize;x++)
+        {
+            if(x % 2 == 0)
+                PlayField.addColumn(x,new Rectangle(cellSize,cellSize, Color.rgb(139, 193, 247)));
+            else
+                PlayField.addColumn(x,new Rectangle(cellSize,cellSize, Color.rgb(129, 184, 240)));
 
-        if (win) {
-            gc.setFill(Color.rgb(18, 204, 68));
-            gc.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 80));
-            gc.fillText("YOU WIN!!!", 120, 250);
-            return;
-        }
-
-        for (int i = snake.size() - 1; i >= 1; i--) {
-            snake.get(i).x = snake.get(i - 1).x;
-            snake.get(i).y = snake.get(i - 1).y;
-        }
-
-        switch (direction) {
-            case up:
-                snake.get(0).y--;
-                if (snake.get(0).y < 0) {
-                    gameOver = true;
-                }
-                break;
-            case down:
-                snake.get(0).y++;
-                if (snake.get(0).y > height) {
-                    gameOver = true;
-                }
-                break;
-            case left:
-                snake.get(0).x--;
-                if (snake.get(0).x < 0) {
-                    gameOver = true;
-                }
-                break;
-            case right:
-                snake.get(0).x++;
-                if (snake.get(0).x > width) {
-                    gameOver = true;
-                }
-                break;
-
-        }
-
-        //Eat food
-        for (int i = 0; i < cntFood; i++) {
-            if (foodX.get(i) == snake.get(0).x && foodY.get(i) == snake.get(0).y) {
-                snake.add(new Corner(-1, -1));
-                if(cntEatFood % 3 == 0)speed++;
-                newFood(i);
+            for(int y = 1; y < MatrixSize;y++) {
+                if (y % 2 == 0 && x % 2 == 0)
+                    PlayField.addRow(y, new Rectangle(cellSize, cellSize, Color.rgb(139, 193, 247)));
+                if (y % 2 == 0 && x % 2 == 1)
+                    PlayField.addRow(y, new Rectangle(cellSize, cellSize, Color.rgb(129, 184, 240)));
+                if (y % 2 == 1 && x % 2 == 0)
+                    PlayField.addRow(y, new Rectangle(cellSize, cellSize, Color.rgb(129, 184, 240)));
+                if (y % 2 == 1 && x % 2 == 1)
+                    PlayField.addRow(y, new Rectangle(cellSize, cellSize, Color.rgb(139, 193, 247)));
             }
-        }
-
-        //Self destroy
-        for (int i = 1; i < snake.size(); i++) {
-            if (snake.get(0).x == snake.get(i).x && snake.get(0).y == snake.get(i).y) {
-                gameOver = true;
-            }
-        }
-
-        //Background
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if ((i + j) % 2 == 0) {
-                    gc.setFill(Color.rgb(139, 193, 247));
-                } else {
-                    gc.setFill(Color.rgb(129, 184, 240));
-                }
-                gc.fillRect(i * cornersize, j * cornersize, cornersize, cornersize);
-            }
-        }
-
-        //Random food color
-        Color cc = Color.rgb(0,0,255);
-
-        for (int i = 0; i < cntFood; i++) {
-            switch (foodColor.get(i)) {
-                case 0:
-                    cc = Color.rgb(255, 177, 156);
-                    break;
-                case 1:
-                    cc = Color.rgb(255, 242, 156);
-                    break;
-                case 2:
-                    cc = Color.rgb(200, 255, 156);
-                    break;
-                case 3:
-                    cc = Color.rgb(150, 245, 255);
-                    break;
-                case 4:
-                    cc = Color.rgb(229, 150, 255);
-                    break;
-            }
-
-            gc.setFill(cc);
-            gc.fillOval(foodX.get(i) * cornersize, foodY.get(i) * cornersize, cornersize, cornersize);
-        }
-
-        // snake
-        for (Corner c : snake) {
-            gc.setFill(Color.rgb(141, 214, 137));
-            gc.fillRect(c.x * cornersize, c.y * cornersize, cornersize - 1, cornersize - 1);
-            gc.setFill(Color.rgb(170, 255, 166));
-            gc.fillRect(c.x * cornersize, c.y * cornersize, cornersize - 2, cornersize - 2);
-
-        }
-
-        //Obstacles
-        for (int i = 1; i < obstaclesK; i++) {
-            gc.setFill(Color.rgb(135, 62, 171));
-            gc.fillRect(obstaclesX.get(i) * cornersize, obstaclesY.get(i) * cornersize, cornersize, cornersize);
-            if (obstaclesX.get(i) == snake.get(0).x && obstaclesY.get(i) == snake.get(0).y) {
-                gameOver = true;
-            }
-        }
-
-        //Text of eating food
-        gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-        gc.fillText("Eat food: " + cntEatFood + "/" + finishFood, 0, 20);
-
-    }
-
-    public static void CreateFood(){
-        for(int i = 0; i< cntFood; i++) {
-            foodX.add(rand.nextInt(width));
-            foodY.add(rand.nextInt(height));
-            CheckObstacles(i);
-            foodColor.add(rand.nextInt(5));
         }
     }
 
-    // food
-    public static void newFood(int i) {
-        cntEatFood++;
-        if(cntEatFood == finishFood){
-            win = true;
-            return;
+    public void PressedKey(KeyEvent event)
+    {
+        if(dirY ==0 && event.getCode() == KeyCode.W)
+        {
+            dirX = 0;
+            dirY = -1;
+            start = true;
         }
-        foodX.set(i, rand.nextInt(width-1));
-        foodY.set(i, rand.nextInt(height-1));
-        CheckObstacles(i);
-        foodColor.set(i, rand.nextInt(5));
+        else if(dirY == 0 && event.getCode() == KeyCode.S)
+        {
+            dirX = 0;
+            dirY = 1;
+            start = true;
+        }
+        else if(dirX ==0 && event.getCode() == KeyCode.A)
+        {
+            dirX = -1;
+            dirY = 0;
+            start = true;
+        }
+        else if(dirX == 0 && event.getCode() == KeyCode.D)
+        {
+            dirX = 1;
+            dirY = 0;
+            start = true;
+        }
 
+        if(start = true) game.play();
     }
 
-    public static void CheckObstacles(int i){
-        for(int j = 1;j<obstaclesK;j++) {
+    public void MoveSnake(){
+
+        if((dirX == -1 && posX == 0) || (dirY == -1 && posY == 0) || (dirX == 1 && posX == MatrixSize-1) || (dirY == 1 && posY == MatrixSize-1)) {
+            GameOver();
+        }
+        else
+        {
+            PlayField.getChildren().remove(SnakePart.get(0).snakeHead);
+            posX+=dirX;
+            posY+=dirY;
+            PlayField.add(SnakePart.get(0).snakeHead, posX,posY);
+            SnakePart.get(0).setPos(posX,posY);
+            if(SnakePart.size() > 1)
+            {
+                for(int x = 1; x<SnakePart.size();x++)
+                {
+                    PlayField.getChildren().remove(SnakePart.get(x).snakeBody);
+                    PlayField.add(SnakePart.get(x).snakeBody, SnakePart.get(x-1).getPosPrevX(),SnakePart.get(x-1).getPosPrevY());
+                    SnakePart.get(x).setPos(SnakePart.get(x-1).getPosPrevX(),SnakePart.get(x-1).getPosPrevY());
+                }
+            }
+
+            CheckFood();
+            CheckObstaclesForSnake();
+            SelfDestroy();
+        }
+    }
+
+    //Changes randomly Food's position
+    public void PlaceFood(int i)
+    {
+        PlayField.getChildren().remove(food.get(i));
+        foodX.set(i, rand.nextInt(20));
+        foodY.set(i, rand.nextInt(20));
+        Color color = ChooseColor();
+        food.set(i, new Rectangle(cellSize,cellSize, color));
+        CheckObstaclesForFood(i);
+        PlayField.add(food.get(i), foodX.get(i),foodY.get(i));
+    }
+
+    public void CreateFood(){
+        for(int i = 0; i < cntFood; i++) {
+            Color color = ChooseColor();
+            food.add(new Rectangle(cellSize,cellSize, color));
+            foodX.add(rand.nextInt(20));
+            foodY.add(rand.nextInt(20));
+            CheckObstaclesForFood(i);
+            PlayField.add(food.get(i), foodX.get(i),foodY.get(i));
+        }
+    }
+
+    public Color ChooseColor(){
+        int x = rand.nextInt(3);
+        switch (x) {
+            case 0:
+                return(Color.rgb(255, 177, 156));
+            case 1:
+                return(Color.rgb(255, 242, 156));
+            case 2:
+                return(Color.rgb(229, 150, 255));
+            case 3:
+                return(Color.rgb(150, 245, 255));
+        }
+
+        return (Color.WHITE);
+    }
+
+    public void CreateSnake(){
+        dirX = 0;
+        dirY = 0;
+        posX = new Random().nextInt(MatrixSize);
+        posY =new Random().nextInt(MatrixSize);
+        for(int j = 1;j<obstaclesX.size()-1;j++) {
+            while(posX == obstaclesX.get(j) && posY == obstaclesY.get(j)){
+                posX = new Random().nextInt(MatrixSize);
+                posY =new Random().nextInt(MatrixSize);
+            }
+        }
+        SnakePart = new ArrayList<>(0);
+        SnakePart.add(new Snake(posX, posY));
+        PlayField.add(SnakePart.get(0).snakeHead, posX,posY);
+    }
+
+    public void CheckObstaclesForFood(int i){
+        for(int j = 1;j<obstaclesX.size()-1;j++) {
             while(foodX.get(i) == obstaclesX.get(j) && foodY.get(i) == obstaclesY.get(j)){
-                //     System.out.println("b");
-                foodX.set(i,rand.nextInt(width));
-                foodY.set(i,rand.nextInt(height));
+                foodX.set(i,rand.nextInt(20));
+                foodY.set(i,rand.nextInt(20));
             }
         }
     }
 
-    public static void obstacles(GraphicsContext gc) {
-        int lastIndex = 0;
-        for (int i = 0; i < 10; i++) {
-            rand = new Random();
-            cntObstacles = rand.nextInt(20) + 10;
-            obstaclesX.add(rand.nextInt(width));
-            obstaclesY.add(rand.nextInt(height));
-
-            int x0 = obstaclesX.get(lastIndex);
-            int y0 = obstaclesY.get(lastIndex);
-
-           // System.out.println(x0 + " " + y0);
-
-            while(obstaclesX.get(i) < 16 && obstaclesX.get(i) > 12) obstaclesX.set(i, rand.nextInt(width));
-            while(obstaclesY.get(i) > 8 && obstaclesY.get(i) < 12) obstaclesY.set(i, rand.nextInt(height));
-
-            int k = (int) Math.random() * (20) + 10;
-            lastIndex++;
-
-            for (int j = 1; j < k; j++) {
-                int x = rand.nextInt(4);
-
-                switch (x) {
-                    case 0:
-                        x0++;
-                        if(x0<16 && x0>12) x0 = x0-2;
-                        obstaclesX.add(x0);
-                        obstaclesY.add(y0);
-                        System.out.println(x0 + " " + y0);
-                        break;
-                    case 1:
-                        x0--;
-                        if(x0<16 && x0>12) x0 = x0+2;
-                        obstaclesX.add(x0);
-                        obstaclesY.add(y0);
-                        System.out.println(x0 + " " + y0);
-                        break;
-                    case 2:
-                        y0++;
-                        if(y0<12 && y0>8) y0 = y0-2;
-                        obstaclesX.add(x0);
-                        obstaclesY.add(y0);
-                        System.out.println(x0 + " " + y0);
-                        break;
-                    case 3:
-                        y0--;
-                        if(y0<12 && y0>8) y0 = y0+2;
-                        obstaclesX.add(x0);
-                        obstaclesY.add(y0);
-                        System.out.println(x0 + " " + y0);
-                        break;
-                }
-                lastIndex++;
+    public void SelfDestroy(){
+        for(int x = 1; x<SnakePart.size();x++)
+        {
+            if(posX == SnakePart.get(x).getPosX() && posY == SnakePart.get(x).getPosY())
+            {
+                GameOver();
+                break;
             }
         }
-        obstaclesK = lastIndex--;
+    }
+
+    public void CheckFood(){
+        for (int i = 0; i < cntFood; i++) {
+            if (foodX.get(i) == posX && foodY.get(i) == posY) {
+              //  System.out.println("c");
+                NewPart(i);
+            }
+        }
+    }
+
+    public void CheckObstaclesForSnake(){
+        for (int i = 1; i < obstaclesX.size()-1; i++) {
+            if (obstaclesX.get(i) == posX && obstaclesY.get(i) == posY) {
+                GameOver();
+                break;
+            }
+        }
+    }
+
+    public  void PlaceObstacles(){
+        for (int i = 0; i < obstaclesK; i++) {
+            obstaclesX.add(rand.nextInt(25));
+            obstaclesY.add(rand.nextInt(25));
+            obstacles.add(new Rectangle(cellSize,cellSize,Color.rgb(135, 62, 171)));
+
+            int x0 = obstaclesX.get(obstaclesX.size() - 1);;
+            int y0 = obstaclesY.get(obstaclesX.size() - 1);;
+
+            int k = (int) Math.random() * (20) + 5;
+
+            int x;
+            boolean flag;
+            for (int j = 1; j < k; j++) {
+                x = rand.nextInt(4);
+                flag = true;
+
+                while(flag){
+                    switch (x) {
+                        case 0:
+                            if(x0 >= 20) {
+                                x = rand.nextInt(4);
+                                break;
+                            }
+                            x0++;
+                            obstaclesX.add(x0);
+                            obstaclesY.add(y0);
+                            obstacles.add(new Rectangle(cellSize,cellSize,Color.rgb(135, 62, 171)));
+                         //   System.out.println(x0 + " " + y0);
+                            flag = false;
+                            break;
+                        case 1:
+                            if(x0 <= 0) {
+                                x = rand.nextInt(4);
+                                break;
+                            }
+                            x0--;
+                            obstaclesX.add(x0);
+                            obstaclesY.add(y0);
+                            obstacles.add(new Rectangle(cellSize,cellSize,Color.rgb(135, 62, 171)));
+                       //     System.out.println(x0 + " " + y0);
+                            flag = false;
+                            break;
+                        case 2:
+                            if(y0 >= 20) {
+                                x = rand.nextInt(4);
+                                break;
+                            }
+                            y0++;
+                            obstaclesX.add(x0);
+                            obstaclesY.add(y0);
+                            obstacles.add(new Rectangle(cellSize,cellSize,Color.rgb(135, 62, 171)));
+                       //     System.out.println(x0 + " " + y0);
+                            flag = false;
+                            break;
+                        case 3:
+                            if(y0 <= 0 ) {
+                                x = rand.nextInt(4);
+                                break;
+                            }
+                            y0--;
+                            obstaclesX.add(x0);
+                            obstaclesY.add(y0);
+                            obstacles.add(new Rectangle(cellSize,cellSize,Color.rgb(135, 62, 171)));
+                            System.out.println(x0 + " " + y0);
+                            flag = false;
+                            break;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < obstaclesX.size()-1; i++) {
+            PlayField.add(obstacles.get(i), obstaclesX.get(i),obstaclesY.get(i));
+        }
+    }
+
+    public void NewPart(int i)
+    {
+        SnakePart.add(new Snake(SnakePart.get(SnakePart.size()-1).getPosPrevX(), SnakePart.get(SnakePart.size()-1).getPosPrevY()));
+        PlayField.add(SnakePart.get(SnakePart.size()-1).snakeBody, SnakePart.get(SnakePart.size()-1).getPosPrevX(), SnakePart.get(SnakePart.size()-1).getPosPrevY());
+        cntEatFood++;
+        Score.setText("Eat Food:" + cntEatFood + "  ");
+        PlaceFood(i);
+
+    }
+
+    public void GameOver()
+    {
+        start = false;
+        game.stop();
+
+        for (int i = 0; i < obstacles.size(); i++){
+            PlayField.getChildren().remove(obstacles.get(i));
+        }
+
+        obstaclesX.clear();
+        obstaclesY.clear();
+        obstacles.clear();
+
+        for (int i = 0; i < foodX.size()-1; i++){
+            PlayField.getChildren().remove(food.get(i));
+        }
+        foodX.clear();
+        foodY.clear();
+        food.clear();
+
+        for(int x =SnakePart.size()-1; x>0; x--) {
+            PlayField.getChildren().remove(SnakePart.get(x).snakeBody);
+            SnakePart.remove(x);
+        }
+
+        PlayField.getChildren().remove(SnakePart.get(0).snakeBody);
+        cntEatFood = 0;
+        mainMenu();
     }
 
     public static void main(String[] args) {
