@@ -20,6 +20,11 @@ class Snake
         posPrevY = Y;
     }
 
+    /**
+     * change position
+     * @param X - x-axis
+     * @param Y - y-axis
+     */
     public void setPos(int X, int Y)
     {
         posPrevX =posX;
@@ -28,18 +33,34 @@ class Snake
         posY =Y;
     }
 
+    /**
+     *
+     * @return - return x position
+     */
     public int getPosX() {
         return posX;
     }
 
+    /**
+     *
+     * @return - return y position
+     */
     public int getPosY() {
         return posY;
     }
 
+    /**
+     *
+     * @return - return previous x position
+     */
     public int getPosPrevX() {
         return posPrevX;
     }
 
+    /**
+     *
+     * @return - return previous y position
+     */
     public int getPosPrevY() {
         return posPrevY;
      }
